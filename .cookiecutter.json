@@ -1,0 +1,14 @@
+{
+  "_output_dir": "/Users/pauleveritt/projects/pauleveritt/pyscript",
+  "_template": "gh:cjolowicz/cookiecutter-hypermodern-python",
+  "author": "Paul Everitt",
+  "copyright_year": "2022",
+  "development_status": "Development Status :: 1 - Planning",
+  "email": "pauleveritt@me.com",
+  "friendly_name": "PyScript Collective",
+  "github_user": "pauleveritt",
+  "license": "Apache-2.0",
+  "package_name": "psc",
+  "project_name": "psc",
+  "version": "0.0.0"
+}
