@@ -14,6 +14,7 @@ hidden:
 maxdepth: 1
 ---
 
+building
 usage
 reference
 contributing
