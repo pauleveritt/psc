@@ -19,4 +19,5 @@ maxdepth: 1
 ---
 
 proper_package
+cmd_runner
 ```
