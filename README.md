@@ -21,6 +21,13 @@
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
 
+_A prototype for a new PyScript Collective repo._
+
+Want to easily get and run high-quality PyScript examples?
+Want to contribute to the PyScript community by helping others?
+
+The PyScript Collective is a compendium of curated and maintained PyScript sample applications, along with the people behind it.
+
 ## Features
 
 - TODO
