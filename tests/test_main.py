@@ -1,17 +1,14 @@
 """Test cases for the __main__ module."""
-import pytest
-from click.testing import CliRunner
+from typer.testing import CliRunner
 
-from psc import __main__
-
-
-@pytest.fixture
-def runner() -> CliRunner:
-    """Fixture for invoking command-line interfaces."""
-    return CliRunner()
+from psc.__main__ import app
 
 
-def test_main_succeeds(runner: CliRunner) -> None:
-    """It exits with a status code of zero."""
-    result = runner.invoke(__main__.main)
+runner = CliRunner()
+
+
+def test_main() -> None:
+    """Ensure the examples home page works as expected."""
+    result = runner.invoke(app, ["--dry-run"])
     assert result.exit_code == 0
+    assert "Skipping server startup" in result.stdout
