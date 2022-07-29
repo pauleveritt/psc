@@ -30,11 +30,20 @@ The PyScript Collective is a compendium of curated and maintained PyScript sampl
 
 ## Features
 
-- TODO
+This Collective repo is a bunch of contributors who help each other maintain good examples, plus onboarding enthusiastic new contributors.
+
+But it's also a software project, providing:
+
+- Easy to find, run, and tinker with high quality, maintained PyScript examples
+- Easy to contribute new examples that become co-owned by the Collective
 
 ## Requirements
 
-- TODO
+To view the examples locally:
+
+```bash
+$ pipx psc
+```
 
 ## Installation
 

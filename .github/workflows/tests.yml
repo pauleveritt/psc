@@ -18,7 +18,7 @@ jobs:
           - { python: "3.10", os: "ubuntu-latest", session: "tests" }
           - { python: "3.10", os: "windows-latest", session: "tests" }
           - { python: "3.10", os: "macos-latest", session: "tests" }
-          - { python: "3.10", os: "ubuntu-latest", session: "typeguard" }
+          #          - { python: "3.10", os: "ubuntu-latest", session: "typeguard" }
           - { python: "3.10", os: "ubuntu-latest", session: "xdoctest" }
           - { python: "3.10", os: "ubuntu-latest", session: "docs-build" }
 
@@ -54,6 +54,16 @@ jobs:
         run: |
           pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry
           poetry --version
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+
+      - name: Ensure browsers are installed
+        run: python -m playwright install
+
+      - name: Install operating system dependencies
+        run: python -m playwright install-deps
 
       - name: Install Nox
         run: |
