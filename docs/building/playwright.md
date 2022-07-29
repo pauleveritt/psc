@@ -1,6 +1,6 @@
 # Playwright Interceptors
 
-PyScript testing needs a real browser -- web components which load Pyoxidizer and execute Python, then change the DOM.
+PyScript testing needs a real browser -- web components which load Pyodide and execute Python, then change the DOM.
 [Playwright](https://playwright.dev/python/) provides this, but we'd like more convenience in the testing:
 
 - Don't actually launch a web server to fetch the examples
@@ -27,7 +27,7 @@ That has to be added to PSC Contributor documentation.
 
 With Playwright installed, now it is time to make it easier to write/run the tests for examples.
 In the previous step, we did "shallow" testing of an example, using `TestClient` to ensure the HTML was returned.
-We didn't actually load the HTML into a DOM, certainly didn't evaluate the PyScript web components, and _definitely_ didn't run some Python in Pyoxidizer.
+We didn't actually load the HTML into a DOM, certainly didn't evaluate the PyScript web components, and _definitely_ didn't run some Python in Pyodide.
 
 The current Collective uses Playwright's `page` fixture directly: you provide a URL, it tells the browser to make an HTTP request.
 This means it needs an HTTP server running.
