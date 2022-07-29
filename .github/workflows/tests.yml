@@ -57,7 +57,13 @@ jobs:
 
       - name: Install Playwright
         run: |
-          npx playwright install-deps
+          pip install playwright
+
+      - name: Ensure browsers are installed
+        run: python -m playwright install
+
+      - name: Install operating system dependencies
+        run: python -m playwright install-deps
 
       - name: Install Nox
         run: |
