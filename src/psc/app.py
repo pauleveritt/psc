@@ -19,6 +19,7 @@ def homepage(request: Request) -> HTMLResponse:
 
 routes = [
     Route("/", homepage),
+    Mount("/examples", StaticFiles(directory=HERE / "examples")),
     Mount("/static", StaticFiles(directory=HERE / "static")),
 ]
 
