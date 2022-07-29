@@ -25,7 +25,7 @@ Let's change the example to be the actual PyScript `Hello World` HTML file.
 
 ## Download PyScript/Pyodide Into Static
 
-Using `curl`, I grabbed the latest `pyscript.css` and `pyscript.js`.
+Using `curl`, I grabbed the latest `pyscript.css`, `pyscript.js`, and `pyscript.py`, plus the '.map` etc.
 This brings up an interesting question about versions.
 Should the Collective examples all use the same PyScript/Pyodide versions, or do we need to support variations?
 
@@ -41,3 +41,55 @@ For now, punting on this.
 As final note...it appears to be around 23 MB to include all the WASM, wheels, etc.
 :::
 
+Next up, Pyodide.
+I got the `.bz2` from the releases and uncompressed/untarred into a release directory.
+Bit by bit, I copied over pieces until "Hello World" loaded:
+
+- The `.mjs` and `.asm*`
+- `packages.json`
+- The distutils.tar and pyodide_py.tar files
+- `.whl` directories for micropip, packaging, and pyparsing
+
+## Hello World Example
+
+Back to `src/psc/examples/hello_world/index.html`.
+Before starting, we should ensure the shallow test -- `TestClient` -- in `test_hello_world.py` works.
+
+To set up PyScript, first, in `head`:
+
+```html
+<link rel="icon" type="image/png" href="../../favicon.png"/>
+<link rel="stylesheet" href="../../static/pyscript.css"/>
+<script defer src="../../static/pyscript.js"></script>
+```
+
+That gets PyScript stuff.
+The JS requests `pyscript.py` which is also in `static`.
+
+To get Pyodide from local installation instead of remove, I added `<py-config>`:
+
+```xml
+<py-config>
+- autoclose_loader: true
+  runtimes:
+    - src: "../../static/pyodide.js"
+      name: pyodide-0.20
+      lang: python
+</py-config>
+```
+
+This was complicated by a few factors:
+
+- The [PyScript docs page is broken](https://github.com/pyscript/pyscript/issues/528)
+- There are no examples in PyScript (and thus no tests) that show a working version of `<py-config>`
+- The default value on `autoclose_loader` appears to be `false` so if you use `<py-config>` you need to explicitly turn it off.
+
+At this point, the page loaded correctly in a browser, going to `http://127.0.0.1:3000/examples/hello_world/index.html`.
+Now, on to Playwright.
+
+## Playwright Tests
+
+And...that was it.
+It just worked.
+
+- Switch to expect and async

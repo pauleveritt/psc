@@ -18,16 +18,18 @@
 
 <body>
 <py-config>
-- autoclose_loader: true
-  runtimes:
+autoclose_loader: true
+runtimes:
     - src: "../../static/pyodide.js"
       name: pyodide-0.20
       lang: python
 </py-config>
-Hello world! <br>
-This is the current date and time, as computed by Python:
+<main>
+    <h1>Hello ...</h1>
+    <div id="output"></div>
+</main>
 <py-script>
-    print("Hello World")
+    pyscript.write("output", "...world")
 </py-script>
 </body>
 </html>

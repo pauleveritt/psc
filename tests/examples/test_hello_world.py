@@ -1,6 +1,6 @@
 """Test the ``Hello World`` example."""
 import pytest
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 from starlette.testclient import TestClient
 
 from psc.app import app
@@ -11,11 +11,15 @@ def test_hello_world() -> None:
     client = TestClient(app)
     response = client.get("/examples/hello_world/index.html")
     assert response.status_code == 200
-    assert "<title>First" in response.text
+    assert "<title>PyScript Hello World" in response.text
 
 
 @pytest.mark.full
 def test_hello_world_full(fake_page: Page) -> None:
     """Use Playwright to do a test on Hello World."""
-    fake_page.goto("http://fake/examples/hello_world/index.html")
-    assert fake_page.title() == "First Example"
+    # url = "http://127.0.0.1:3000/examples/hello_world/index.html"
+    url = "http://fake/examples/hello_world/index.html"
+    fake_page.goto(url)
+    element = fake_page.wait_for_selector("text=...world")
+    fake_page.pause()
+    assert element.text_content() == "...world"

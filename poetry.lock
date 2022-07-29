@@ -831,6 +831,14 @@ tomli = ">=1.0.0"
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
 
 [[package]]
+name = "pytest-asyncio-cooperative"
+version = "0.28.0"
+description = "Run all your asynchronous tests cooperatively."
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "pytest-base-url"
 version = "2.0.0"
 description = "pytest plugin for URL based testing"
@@ -1382,7 +1390,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b87d3d11b3dbedf2367a90fd2793915d3b1d9e8c27abc0f886987be3c5b9e17f"
+content-hash = "3a4c94d5f8e6e9136faae3464cf188074907ef1b56c4aa257a54442867670169"
 
 [metadata.files]
 alabaster = [
@@ -1736,6 +1744,10 @@ pyparsing = [
 pytest = [
     {file = "pytest-7.1.2-py3-none-any.whl", hash = "sha256:13d0e3ccfc2b6e26be000cb6568c832ba67ba32e719443bfe725814d3c42433c"},
     {file = "pytest-7.1.2.tar.gz", hash = "sha256:a06a0425453864a270bc45e71f783330a7428defb4230fb5e6a731fde06ecd45"},
+]
+pytest-asyncio-cooperative = [
+    {file = "pytest-asyncio-cooperative-0.28.0.tar.gz", hash = "sha256:1085a3d92b575315652cf05493da243bb620622e06a83096488afc6d250f1b9a"},
+    {file = "pytest_asyncio_cooperative-0.28.0-py3-none-any.whl", hash = "sha256:d22a3677fa990f0be1843513c727559d5bc638f19734a1805d0d6272befb585a"},
 ]
 pytest-base-url = [
     {file = "pytest-base-url-2.0.0.tar.gz", hash = "sha256:e1e88a4fd221941572ccdcf3bf6c051392d2f8b6cef3e0bc7da95abec4b5346e"},
