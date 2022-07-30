@@ -29,13 +29,13 @@ def route_handler(page: Page, route: Route) -> None:
         # here, as page.route below says to only cover requests to
         # http://fake/. So this is a "just in case" it's misconfigured.
         response = page.request.fetch(route.request)
-        body = response.text()
+        body = response.body()
         mime_type = response.headers["Content-Type"]
 
-    route.fulfill(
-        body=body,
-        headers={"Content-Type": mime_type}
-    )
+    if mime_type:
+        route.fulfill(body=body, headers={"Content-Type": mime_type})
+    else:
+        route.fulfill(body=body)
 
 
 @pytest.fixture

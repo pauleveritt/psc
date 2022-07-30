@@ -23,4 +23,5 @@ def test_hello_world_full(fake_page: Page) -> None:
     element = fake_page.wait_for_selector("text=...world")
     # Turn this on when using `PWDEBUG=1` to run "head-ful"
     # fake_page.pause()
-    assert element.text_content() == "...world"
+    if element:
+        assert element.text_content() == "...world"

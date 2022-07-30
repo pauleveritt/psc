@@ -48,7 +48,7 @@ def test_route_handler_non_fake() -> None:
         cast(Page, dummy_page),
         cast(Route, dummy_route),
     )
-    assert dummy_route.body == "URL Returned Text"
+    assert dummy_route.body == b"URL Returned Text"  # type: ignore
 
 
 @dataclass
@@ -63,6 +63,10 @@ class DummyResponse:
     def text(self) -> str:
         """Fake the text method."""
         return self.dummy_text
+
+    def body(self) -> bytes:
+        """Fake the text method."""
+        return bytes(self.dummy_text, "utf-8")
 
 
 @dataclass

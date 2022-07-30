@@ -6,7 +6,9 @@ import time
 from textwrap import dedent
 
 import micropip  # noqa: F401
-from js import console, document
+from js import console
+from js import document
+
 
 loop = asyncio.get_event_loop()
 

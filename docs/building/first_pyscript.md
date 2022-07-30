@@ -99,14 +99,15 @@ In the PyScript repo, they sniff at console messages and do a backoff to wait fo
 Playwright has help for this.
 The `page` can [wait for a selector to be satisfied](https://playwright.dev/python/docs/api/class-page#page-wait-for-selector).
 
-This is *so much nicer*.
+This is _so much nicer_.
 Tests run a LOT faster:
+
 - Our assets (HTML, CSS, `pyscript.js`, `pyscript.css`) are served without an HTTP server
 - Pyodide itself isn't loaded from CDN nor even HTTP
-Also, if something goes wrong, you aren't stuck with a hung thread in `SimpleHTTPServer`.
-Finally, as I noticed when working on vacation with terrible Internet -- everything can run offline...the examples and their tests.
+  Also, if something goes wrong, you aren't stuck with a hung thread in `SimpleHTTPServer`.
+  Finally, as I noticed when working on vacation with terrible Internet -- everything can run offline...the examples and their tests.
 
-It was *very* hard to get to this point, as I ran into a number of obscure bugs:
+It was _very_ hard to get to this point, as I ran into a number of obscure bugs:
 
 - The `<py-config>` YAML bug above was a multi-hour waste
 - Reading files as strings failed obscurely on Pyodide's `.asm.*` files
@@ -139,17 +140,31 @@ Finally, the most important technique was to...slow down and work methodically w
 I should have done this from the start, hardening the interceptor and its surface area with Playwright.
 I spent hours on things a decent test (and even `mypy`) would have told me about bytes vs. strings.
 
+## QA Tools
+
+When running `pre-commit`, it appears Prettier re-formats the YAML contents of `<py-config>`.
+I could have spent time to figure it out (e.g. skip those files, or teach Prettier how to handle it.)
+But it's not urgent, so I disabled Prettier in the `.pre-commit-config.yaml` file.
+
+Flake8 had a lot of complaints with `pyscript.py`.
+I edited `.flake8` to turn off all the particular problems, to avoid editing the file itself.
+Probably needs a better solution.
+
+`mypy` found a couple of actual bugs.
+Thanks, Python type hinting!
+(Although I did chicken out with a `type: ignore` on a bytes thing in a test.)
+
 ## Could Be Better
 
 This is very much a prototype and lots could be better.
 
-There are still bunches of failure modes in the interceptor, and when it fails, things get *very mysterious*.
+There are still bunches of failure modes in the interceptor, and when it fails, things get _very mysterious_.
 A good half-day of hardening and test-writing -- primarily unit tests -- would largely do it.
 To go further, using Starlette's `FileResponse` and making an "adapter" to Playwright's `APIResponse` would help.
 Starlette has likely learned a lot of lessons on file reading/responding.
 
-Speaking of the response, this code does the minimum. 
-Content length? 
+Speaking of the response, this code does the minimum.
+Content length?
 Ha!
 Again, adopting more of a regular Python web framework like Starlette (or from the old days, `webob`) would be smart.
 

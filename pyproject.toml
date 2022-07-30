@@ -51,6 +51,7 @@ myst-parser = { version = ">=0.16.1" }
 requests = "^2.28.1"
 pytest-playwright = "^0.3.0"
 pytest-asyncio-cooperative = "^0.28.0"
+nox-poetry = "^1.0.1"
 
 [tool.poetry.scripts]
 psc = "psc.__main__:main"
@@ -86,7 +87,7 @@ no_implicit_optional = true
 [[tool.mypy.overrides]]
 module = [
     'uvicorn',
-    'packagename2'
+    'jinja2'
 ]
 ignore_missing_imports = true
 
