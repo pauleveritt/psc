@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from dataclasses import field
 from typing import cast
 
 import pytest
@@ -34,7 +35,8 @@ def test_route_handler_fake_good_path() -> None:
         cast(Route, dummy_route),
     )
     if dummy_route.body:
-        assert dummy_route.body.startswith("body {")
+        body = str(dummy_route.body)
+        assert body.startswith("b'body {")
 
 
 def test_route_handler_non_fake() -> None:
@@ -46,7 +48,7 @@ def test_route_handler_non_fake() -> None:
         cast(Page, dummy_page),
         cast(Route, dummy_route),
     )
-    assert dummy_route.body == "URL Returned Text"
+    assert dummy_route.body == b"URL Returned Text"  # type: ignore
 
 
 @dataclass
@@ -54,10 +56,17 @@ class DummyResponse:
     """Fake the Playwright ``Response`` class."""
 
     dummy_text: str = ""
+    headers: dict[str, object] = field(
+        default_factory=lambda: {"Content-Type": "text/html"}
+    )
 
     def text(self) -> str:
         """Fake the text method."""
         return self.dummy_text
+
+    def body(self) -> bytes:
+        """Fake the text method."""
+        return bytes(self.dummy_text, "utf-8")
 
 
 @dataclass
@@ -78,10 +87,12 @@ class DummyRoute:
 
     request: DummyRequest
     body: str | None = None
+    headers: dict[str, object] | None = None
 
-    def fulfill(self, body: str) -> None:
+    def fulfill(self, body: str, headers: dict[str, object]) -> None:
         """Stub the Playwright ``route.fulfill`` method."""
         self.body = body
+        self.headers = headers
 
 
 @dataclass

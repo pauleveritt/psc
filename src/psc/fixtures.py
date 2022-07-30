@@ -1,4 +1,5 @@
 """pytest fixtures to make testing easier."""
+from mimetypes import guess_type
 from urllib.parse import urlparse
 
 import pytest
@@ -19,8 +20,8 @@ def route_handler(page: Page, route: Route) -> None:
         # if this_path.endswith(".html") or this_path.endswith(".css"):
         this_fs_path = HERE / this_path
         if this_fs_path.exists():
-            with open(this_fs_path) as f:
-                body = f.read()
+            mime_type = guess_type(this_fs_path)[0]
+            body = this_fs_path.read_bytes()
         else:
             raise ValueError("That path doesn't exist on disk.")
     else:
@@ -28,10 +29,13 @@ def route_handler(page: Page, route: Route) -> None:
         # here, as page.route below says to only cover requests to
         # http://fake/. So this is a "just in case" it's misconfigured.
         response = page.request.fetch(route.request)
-        body = response.text()
-    route.fulfill(
-        body=body,
-    )
+        body = response.body()
+        mime_type = response.headers["Content-Type"]
+
+    if mime_type:
+        route.fulfill(body=body, headers={"Content-Type": mime_type})
+    else:
+        route.fulfill(body=body)
 
 
 @pytest.fixture
@@ -40,9 +44,9 @@ def fake_page(page: Page) -> Page:  # pragma: no cover
 
     def _route_handler(route: Route) -> None:
         """Instead of doing this inline, call to a helper for easier testing."""
-        return route_handler(page, route)
+        route_handler(page, route)
 
     # Use Playwright's route method to intercept any URLs pointed at the
     # fake server and run through the interceptor instead.
-    page.route("http://fake/**", _route_handler)
+    page.route("**", _route_handler)
     return page

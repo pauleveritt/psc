@@ -3,7 +3,7 @@ from pathlib import Path
 
 from starlette.applications import Starlette
 from starlette.requests import Request
-from starlette.responses import HTMLResponse
+from starlette.responses import FileResponse
 from starlette.routing import Mount
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
@@ -12,13 +12,20 @@ from starlette.staticfiles import StaticFiles
 HERE = Path(__file__).parent
 
 
-def homepage(request: Request) -> HTMLResponse:
+async def favicon(request: Request) -> FileResponse:
+    """Handle the favicon."""
+    return FileResponse(HERE / "favicon.png")
+
+
+async def homepage(request: Request) -> FileResponse:
     """Handle the home page."""
-    return HTMLResponse("<h1>Hello, world!</h1>")
+    return FileResponse(HERE / "index.html")
 
 
 routes = [
     Route("/", homepage),
+    Route("/index.html", homepage),
+    Route("/favicon.png", favicon),
     Mount("/examples", StaticFiles(directory=HERE / "examples")),
     Mount("/static", StaticFiles(directory=HERE / "static")),
 ]
