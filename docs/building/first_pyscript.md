@@ -7,7 +7,7 @@ In this step we'll add the "Hello World" example along with unit/shallow/full te
 We will _not_ though go further into how this example gets listed.
 We also won't do any automation across examples: each example gets its own tests.
 
-Big ideas: tests run offline, as the CSS/JS and even Pyodide WASM/JS are locally "served".
+Big ideas: tests run offline and faster, no quirks for threaded server, much simpler "wait" for DOM.
 
 ## Re-Organize Tests
 
@@ -87,20 +87,77 @@ This was complicated by a few factors:
 At this point, the page loaded correctly in a browser, going to `http://127.0.0.1:3000/examples/hello_world/index.html`.
 Now, on to Playwright.
 
-## Playwright Tests
+## Playwright Interceptor
 
-And...that was it.
-It just worked.
+We're going to be handling more types of files now, so we change the `Content-Type` sniffing.
+Instead of looking at the extension, we use Python's `mimetypes` library.
 
-- Key was `wait_for_selector`
-- Ran into numerous problems in the `<py-config>` loader's YAML
-- Use `PWDEBUG=1 poetry run pytest -s tests/examples/test_hello_world.py`
+For the test, we want to check that our PyScript output is written into the DOM.
+This doesn't happen immediately.
+In the PyScript repo, they sniff at console messages and do a backoff to wait for Pyodide execution.
+
+Playwright has help for this.
+The `page` can [wait for a selector to be satisfied](https://playwright.dev/python/docs/api/class-page#page-wait-for-selector).
+
+This is *so much nicer*.
+Tests run a LOT faster:
+- Our assets (HTML, CSS, `pyscript.js`, `pyscript.css`) are served without an HTTP server
+- Pyodide itself isn't loaded from CDN nor even HTTP
+Also, if something goes wrong, you aren't stuck with a hung thread in `SimpleHTTPServer`.
+Finally, as I noticed when working on vacation with terrible Internet -- everything can run offline...the examples and their tests.
+
+It was *very* hard to get to this point, as I ran into a number of obscure bugs:
+
+- The `<py-config>` YAML bug above was a multi-hour waste
+- Reading files as strings failed obscurely on Pyodide's `.asm.*` files
+- Ditto for MIME type, which needs to be `application/wasm` (though the interwebs are confusing on this)
+- Any time the flake8/black/prettier stack ran on stuff in static, all hell broke loose
+
+## Debugging
+
+It was kind of miserable getting to this point.
+What debugging techniques did I discover?
+
+Foremost, running the Playwright test in "head-ful" mode and looking at both the Chromium console and the network tab.
+Playwright made it easy, including with the little controller UI app that launches and lets you step through:
+
+```bash
+$ PWDEBUG=1 poetry run pytest -s tests/examples/test_hello_world.py
+```
+
+For this, you need to add a `page.pause()` after the `page.goto()`.
+
+Next, when running like this, you can use Python `print()` statements that write to the console which launched the head-ful client.
+That's useful in the interceptor.
+You could alternatively do some console logging with Playwright's (cumbersome) syntax for talking to the page from Python.
+But diving into the Chromium console is a chore.
+
+When things weren't in "fail catastrophically" mode, the most productive debugging was...in the debugger.
+I set a breakpoint interceptor code, ran the tests, and stopped on each "file" request.
+
+Finally, the most important technique was to...slow down and work methodically with unit tests.
+I should have done this from the start, hardening the interceptor and its surface area with Playwright.
+I spent hours on things a decent test (and even `mypy`) would have told me about bytes vs. strings.
 
 ## Could Be Better
 
-- Lots of failure modes in the interceptor
-- Perhaps a move to async Playwright? (But quite painful)
-- Set up more of the `Response`
-- Perhaps even use Starlette `FileResponse` with some kind of adapter
-- Speed up test running with [ideas from Pyodide Playwright ticket](https://github.com/pyodide/pyodide/issues/2048)
--
+This is very much a prototype and lots could be better.
+
+There are still bunches of failure modes in the interceptor, and when it fails, things get *very mysterious*.
+A good half-day of hardening and test-writing -- primarily unit tests -- would largely do it.
+To go further, using Starlette's `FileResponse` and making an "adapter" to Playwright's `APIResponse` would help.
+Starlette has likely learned a lot of lessons on file reading/responding.
+
+Speaking of the response, this code does the minimum. 
+Content length? 
+Ha!
+Again, adopting more of a regular Python web framework like Starlette (or from the old days, `webob`) would be smart.
+
+We could speed up test running with [ideas from Pyodide Playwright ticket](https://github.com/pyodide/pyodide/issues/2048).
+It looks fun to poke around on that, but the hours lost in hell discouraged me.
+It's pretty fast right now, and a great improvement over the status quo.
+But a 3x speedup seems interesting.
+
+Finally, it's possible that async Playwright is the answer, for both general speedups and `wait_for_selector`.
+When I first dabbled at this though, it got horrible, quickly (integrating main loops, sprinkling async/await everywhere.)
+I then read something saying "don't do it unless you have to."

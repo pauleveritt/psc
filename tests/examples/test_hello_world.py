@@ -1,6 +1,6 @@
 """Test the ``Hello World`` example."""
 import pytest
-from playwright.sync_api import Page, expect
+from playwright.sync_api import Page
 from starlette.testclient import TestClient
 
 from psc.app import app
@@ -21,5 +21,6 @@ def test_hello_world_full(fake_page: Page) -> None:
     url = "http://fake/examples/hello_world/index.html"
     fake_page.goto(url)
     element = fake_page.wait_for_selector("text=...world")
-    fake_page.pause()
+    # Turn this on when using `PWDEBUG=1` to run "head-ful"
+    # fake_page.pause()
     assert element.text_content() == "...world"
