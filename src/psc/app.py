@@ -8,10 +8,12 @@ from starlette.routing import Mount
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
 
+
 HERE = Path(__file__).parent
 
 
 async def favicon(request: Request) -> FileResponse:
+    """Handle the favicon."""
     return FileResponse(HERE / "favicon.png")
 
 

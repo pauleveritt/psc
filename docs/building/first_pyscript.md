@@ -4,7 +4,7 @@ Well, that was certainly a lot of prep.
 
 Let's get into PyScript and examples.
 In this step we'll add the "Hello World" example along with unit/shallow/full tests.
-We will *not* though go further into how this example gets listed.
+We will _not_ though go further into how this example gets listed.
 We also won't do any automation across examples: each example gets its own tests.
 
 Big ideas: tests run offline, as the CSS/JS and even Pyodide WASM/JS are locally "served".
@@ -58,8 +58,8 @@ Before starting, we should ensure the shallow test -- `TestClient` -- in `test_h
 To set up PyScript, first, in `head`:
 
 ```html
-<link rel="icon" type="image/png" href="../../favicon.png"/>
-<link rel="stylesheet" href="../../static/pyscript.css"/>
+<link rel="icon" type="image/png" href="../../favicon.png" />
+<link rel="stylesheet" href="../../static/pyscript.css" />
 <script defer src="../../static/pyscript.js"></script>
 ```
 
@@ -92,4 +92,15 @@ Now, on to Playwright.
 And...that was it.
 It just worked.
 
-- Switch to expect and async
+- Key was `wait_for_selector`
+- Ran into numerous problems in the `<py-config>` loader's YAML
+- Use `PWDEBUG=1 poetry run pytest -s tests/examples/test_hello_world.py`
+
+## Could Be Better
+
+- Lots of failure modes in the interceptor
+- Perhaps a move to async Playwright? (But quite painful)
+- Set up more of the `Response`
+- Perhaps even use Starlette `FileResponse` with some kind of adapter
+- Speed up test running with [ideas from Pyodide Playwright ticket](https://github.com/pyodide/pyodide/issues/2048)
+-

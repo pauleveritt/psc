@@ -9,3 +9,10 @@ def test_homepage() -> None:
     client = TestClient(app)
     response = client.get("/")
     assert response.status_code == 200
+
+
+def test_favicon() -> None:
+    """Test the view for the favicon route."""
+    client = TestClient(app)
+    response = client.get("/favicon.png")
+    assert response.status_code == 200
