@@ -1,4 +1,5 @@
-"""Test the Starlette web app for browsing examples."""
+"""Test the Starlette web app for browsing pages."""
+from bs4 import BeautifulSoup
 from starlette.testclient import TestClient
 
 from psc.app import app
@@ -9,10 +10,9 @@ def test_homepage() -> None:
     client = TestClient(app)
     response = client.get("/")
     assert response.status_code == 200
-
-
-def test_favicon() -> None:
-    """Test the view for the favicon route."""
-    client = TestClient(app)
-    response = client.get("/favicon.png")
-    assert response.status_code == 200
+    soup = BeautifulSoup(response.text, "html5lib")
+    title = soup.select_one("title")
+    assert title
+    assert title.text == "Home Page | PyScript Collective"
+    main = soup.select_one("main")
+    assert main
