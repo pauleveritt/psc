@@ -36,7 +36,7 @@ def test_navbar_logo() -> None:
     client = TestClient(app)
     link_response = client.get("/index.html")
     soup = BeautifulSoup(link_response.text, "html5lib")
-    nav = soup.select_one('nav')
+    nav = soup.select_one("nav")
     assert nav
     logo = nav.select_one("img")
     assert logo

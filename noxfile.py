@@ -159,6 +159,7 @@ def mypy(session: Session) -> None:
         "beautifulsoup4",
         "types-beautifulsoup4",
         "html5lib",
+        "jinja2",
     )
     session.run("mypy", *args)
 
@@ -176,6 +177,7 @@ def tests(session: Session) -> None:
         "beautifulsoup4",
         "types-beautifulsoup4",
         "html5lib",
+        "jinja2",
     )
     try:
         session.run("coverage", "run", "--parallel", "-m", "pytest", *session.posargs)
@@ -210,6 +212,7 @@ def typeguard(session: Session) -> None:
         "beautifulsoup4",
         "types-beautifulsoup4",
         "html5lib",
+        "jinja2",
     )
     session.run("pytest", f"--typeguard-packages={package}", *session.posargs)
 

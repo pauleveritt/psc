@@ -55,6 +55,7 @@ nox-poetry = "^1.0.1"
 beautifulsoup4 = "^4.11.1"
 html5lib = "^1.1"
 types-beautifulsoup4 = "^4.11.4"
+Jinja2 = "^3.1.2"
 
 [tool.poetry.scripts]
 psc = "psc.__main__:main"

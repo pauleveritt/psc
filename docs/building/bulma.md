@@ -1,10 +1,11 @@
 # Bulma Styling
 
 Let's start moving towards the goal of providing attractive examples.
-Each example will appear in several "targets", primarily a website like the [existing examples](https://pyscript.net/examples/).
+Each example will appear in several "targets", primarily a website like
+the [existing examples](https://pyscript.net/examples/).
 
 In this step, we'll start building the PSC website.
-We will *not* in this step, though, tackle any concept of a build step, not even a template language.
+We will *not* in this step, though, tackle any concept of a build step, nor anything beyond the homepage.
 
 Big ideas: use off-the-shelf CSS framework, static generation, dead-simple web tech.
 
@@ -16,7 +17,8 @@ As it turns out, we're also shipping a PyPI package -- the PyScript Gallery, aka
 
 We need a nice-looking web app.
 Since we're not designers, let's use a popular, off-the-shelf CSS framework.
-I have experience with (and faith in) [Bulma](https://bulma.io): it's attractive out-of-the-box, mature, and strikes the right balance.
+I have experience with (and faith in) [Bulma](https://bulma.io): it's attractive out-of-the-box, mature, and strikes the
+right balance.
 
 ## New Test With `beautifulsoup`
 
@@ -69,10 +71,43 @@ Let's put the "main" part of our page into a `<main class="section">` tag.
 For the failing test, we'll simply look to see there is a `<main>`.
 But, as this is no longer a static asset, we'll put this in `test_app.test_homepage`.
 
-## Future
+## Templating
 
-We won't go any further in this step, as we'll quickly discover -- it will suck to repeat the layout across every file.
-We will likely want templating, but we'll also want to retain the "just copy-paste the example" part as well.
+It sucks to repeat the layout across every static HTML file.
+Let's make some Jinja2 templates, then [setup Starlette](https://www.starlette.io/templates/) to use it the templates.
+
+As precursor, install Jinja2 as a dev dependency.
+
+We'll start by making a templates directory at `src/psc/templates`.
+In there, we'll make `page.jinja2` and `layout.jinja2`.
+
+:::{note} PyCharm Template Setup
+
+If you use PyCharm, use `Mark This Directory` to make it a template directory.
+Also, go into preferences and set the project as using Jinja2 for `Template Languages`.
+:::
+
+In `layout.jinja2`, take everything out that isn't in `<main>`.
+Provide a slot for title and main.
+Then change `page.jinja2` to point at `layout.jinja2`, filling those two slots.
+
+In `app.py`, we change the `homepage` route to return a template.
+The context dictionary for the template will have two pieces of data:
+- The title of the current page
+- The HTML that should go in the main block.
+
+Let's do three things:
+
+- Change `index.html` only have the `<main>` part
+- In the route, read the file content
+- Then pass the file contents into `page.jinja2`, using `| safe`
+
+When done correctly, the tests should pass.
+
+## Future
 
 This PSC prototype just uses downloaded Bulma CSS and other assets.
 It doesn't bring in the SASS customizations and software, nor does it look at Bulma forks that bring in CSS Variables.
+
+While we did a little templating, we didn't go far.
+It's going to get a lot more interesting and intricate, as we have different ways we want to package things.

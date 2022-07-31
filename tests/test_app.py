@@ -11,5 +11,8 @@ def test_homepage() -> None:
     response = client.get("/")
     assert response.status_code == 200
     soup = BeautifulSoup(response.text, "html5lib")
+    title = soup.select_one("title")
+    assert title
+    assert title.text == "Home Page | PyScript Collective"
     main = soup.select_one("main")
     assert main

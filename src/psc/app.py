@@ -7,9 +7,12 @@ from starlette.responses import FileResponse
 from starlette.routing import Mount
 from starlette.routing import Route
 from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
+from starlette.templating import _TemplateResponse
 
 
 HERE = Path(__file__).parent
+templates = Jinja2Templates(directory=HERE / "templates")
 
 
 async def favicon(request: Request) -> FileResponse:
@@ -17,9 +20,18 @@ async def favicon(request: Request) -> FileResponse:
     return FileResponse(HERE / "favicon.png")
 
 
-async def homepage(request: Request) -> FileResponse:
+async def homepage(request: Request) -> _TemplateResponse:
     """Handle the home page."""
-    return FileResponse(HERE / "index.html")
+    index_file = HERE / "index.html"
+
+    return templates.TemplateResponse(
+        "page.jinja2",
+        dict(
+            title="Home Page",
+            main=index_file.read_text(),
+            request=request,
+        ),
+    )
 
 
 routes = [
