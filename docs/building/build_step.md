@@ -6,8 +6,8 @@ There's a `<py-script>` in an example.
 What are the ways someone might consume it?
 Turns out -- a LOT!
 
-1. *Viewer From Website*. 
-This is the most normal one. 
+1. *Viewer From Website*.
+This is the most normal one.
 A Viewer goes to the Collective site, clicks the link for Examples, and sees the listing.
 The Viewer then clicks on the example, gets it loaded up, and looks at it.
 This one has a later variation -- what if we let Viewers edit in the browser and see the updated example?

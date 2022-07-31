@@ -21,7 +21,6 @@ except ImportError:
     {sys.executable} -m pip install nox-poetry"""
     raise SystemExit(dedent(message)) from None
 
-
 package = "psc"
 python_versions = [
     "3.10",
@@ -153,7 +152,14 @@ def mypy(session: Session) -> None:
     """Type-check using mypy."""
     args = session.posargs or ["src", "tests", "docs/conf.py"]
     session.install(".")
-    session.install("mypy", "pytest", "pytest-playwright")
+    session.install(
+        "mypy",
+        "pytest",
+        "pytest-playwright",
+        "beautifulsoup4",
+        "types-beautifulsoup4",
+        "html5lib",
+    )
     session.run("mypy", *args)
 
 
@@ -162,7 +168,14 @@ def tests(session: Session) -> None:
     """Run the test suite."""
     session.install(".")
     session.install(
-        "coverage[toml]", "pytest", "pygments", "requests", "pytest-playwright"
+        "coverage[toml]",
+        "pytest",
+        "pygments",
+        "requests",
+        "pytest-playwright",
+        "beautifulsoup4",
+        "types-beautifulsoup4",
+        "html5lib",
     )
     try:
         session.run("coverage", "run", "--parallel", "-m", "pytest", *session.posargs)
@@ -188,7 +201,16 @@ def coverage(session: Session) -> None:
 def typeguard(session: Session) -> None:
     """Runtime type checking using Typeguard."""
     session.install(".")
-    session.install("pytest", "typeguard", "pygments", "requests", "pytest-playwright")
+    session.install(
+        "pytest",
+        "typeguard",
+        "pygments",
+        "requests",
+        "pytest-playwright",
+        "beautifulsoup4",
+        "types-beautifulsoup4",
+        "html5lib",
+    )
     session.run("pytest", f"--typeguard-packages={package}", *session.posargs)
 
 
