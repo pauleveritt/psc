@@ -59,9 +59,7 @@ Lots that can be done here.
 - Arrange for `/example/hello_world` and `/example/hello_world/index.html` to both resolve
 - Fix the silly BeautifulSoup "allow str or List[str]" in upstream so tests don't have to cast all the time
 - Get a "subtitle" from `/examples/hello_world/index.html` and a `<meta name="subtitle" content="...">` tag
-
 - Don't extract `<main>` itself from the example, as we want to control it in the layout...just the children
-- Make the home page nicer (though still content free)
 
 ## Future
 

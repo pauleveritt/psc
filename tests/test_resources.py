@@ -8,7 +8,7 @@ from psc.here import HERE
 from psc.resources import Example
 from psc.resources import get_description
 from psc.resources import get_head_nodes
-from psc.resources import get_main_node
+from psc.resources import get_main_node_content
 from psc.resources import get_pyscript_nodes
 from psc.resources import get_resources
 from psc.resources import tag_filter
@@ -74,15 +74,15 @@ def test_get_no_main() -> None:
     example_html = "<body>Hello</body>"
     soup = BeautifulSoup(example_html, "html5lib")
     with pytest.raises(ValueError):
-        get_main_node(soup)
+        get_main_node_content(soup)
 
 
 def test_get_main() -> None:
     """Return the main node from an example."""
-    example_html = "<body><main>Hello</main></body>"
+    example_html = '<body><main class="content">Hello <em>world</em></main></body>'
     soup = BeautifulSoup(example_html, "html5lib")
-    main = get_main_node(soup)
-    assert main == "<main>Hello</main>"
+    main = get_main_node_content(soup)
+    assert main == "Hello <em>world</em>"
 
 
 def test_get_pyscript_nodes() -> None:
@@ -118,7 +118,7 @@ def test_example() -> None:
     )
     assert "hello_world.css" in this_example.extra_head
     assert "hello_world.js" in this_example.extra_head
-    assert "<main>" in this_example.main
+    assert "<h1>Hello ...</h1>" in this_example.main
     assert "<py-config>" not in this_example.extra_pyscript
     assert "<py-script>" in this_example.extra_pyscript
 

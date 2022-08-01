@@ -56,14 +56,14 @@ def get_head_nodes(s: BeautifulSoup) -> str:
     return ""
 
 
-def get_main_node(s: BeautifulSoup) -> str:
+def get_main_node_content(s: BeautifulSoup) -> str:
     """Get the main node but raise an exception if not present."""
     # Moving to a helper to allow testing ValueError without needing
     # to ship a broken (non-main) example.
     main_element = s.select_one("main")
     if main_element is None:  # pragma: no cover
         raise ValueError("Example file has no <main> element")
-    return f"<main>{main_element.decode_contents()}</main>"
+    return f"{main_element.decode_contents()}"
 
 
 def get_pyscript_nodes(s: BeautifulSoup) -> str:
@@ -124,7 +124,7 @@ class Example(Resource):
         self.extra_head = get_head_nodes(soup)
 
         # Main
-        self.main = get_main_node(soup)
+        self.main = get_main_node_content(soup)
 
         # Extra PyScript
         self.extra_pyscript = get_pyscript_nodes(soup)
