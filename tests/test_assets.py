@@ -5,16 +5,15 @@ from starlette.testclient import TestClient
 from psc.app import app
 
 
-def test_favicon() -> None:
+def test_favicon(test_client: TestClient) -> None:
     """Test the view for the favicon route."""
-    client = TestClient(app)
-    link_response = client.get("/index.html")
+    link_response = test_client.get("/index.html")
     soup = BeautifulSoup(link_response.text, "html5lib")
     link = soup.select_one('link[rel="icon"]')
     assert link
     favicon_href = link.get("href")
     assert favicon_href == "/favicon.png"
-    favicon_response = client.get(favicon_href)
+    favicon_response = test_client.get(favicon_href)
     assert favicon_response.status_code == 200
 
 

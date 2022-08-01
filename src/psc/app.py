@@ -1,5 +1,7 @@
 """Provide a web server to browse the examples."""
+import contextlib
 from pathlib import PurePath
+from typing import AsyncContextManager
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -11,7 +13,8 @@ from starlette.templating import Jinja2Templates
 from starlette.templating import _TemplateResponse
 
 from psc.here import HERE
-from psc.resources import Example
+from psc.resources import Resources
+from psc.resources import get_resources
 
 
 templates = Jinja2Templates(directory=HERE / "templates")
@@ -39,15 +42,16 @@ async def homepage(request: Request) -> _TemplateResponse:
 async def example(request: Request) -> _TemplateResponse:
     """Handle an example page."""
     example_path = PurePath(request.path_params["example_name"])
-    example = Example(path=example_path)
+    resources: Resources = request.app.state.resources
+    this_example = resources.examples[example_path]
 
     return templates.TemplateResponse(
         "example.jinja2",
         dict(
-            title=example.title,
-            extra_head=example.extra_head,
-            main=example.main,
-            extra_pyscript=example.extra_pyscript,
+            title=this_example.title,
+            extra_head=this_example.extra_head,
+            main=this_example.main,
+            extra_pyscript=this_example.extra_pyscript,
             request=request,
         ),
     )
@@ -62,4 +66,16 @@ routes = [
     Mount("/static", StaticFiles(directory=HERE / "static")),
 ]
 
-app = Starlette(debug=True, routes=routes)
+
+@contextlib.asynccontextmanager  # type: ignore
+async def lifespan(a: Starlette) -> AsyncContextManager:  # type: ignore
+    """Run the resources factory at startup and make available to views."""
+    a.state.resources = get_resources()
+    yield
+
+
+app = Starlette(
+    debug=True,
+    routes=routes,
+    lifespan=lifespan,
+)

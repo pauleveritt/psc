@@ -33,6 +33,23 @@ We then write the `resources.get_resources` function that generates a populated 
 ## Listing Examples
 
 Now that we have the listing of examples, we head back to `app.py` and put it to work.
+We'll use Starlette's "lifespan" support to:
+
+- Register a startup function which...
+- Runs `get_resources` and...
+- Assigns to `app.state.resources`
+
+We'll then change the `examples` view to get the resource from `request.app.state.resources`.
+
+When we do this, though, `TestClient` breaks.
+It doesn't ordinarily run the lifecycle methods.
+Instead, we need to use the [context manager](https://www.starlette.io/events/#running-event-handlers-in-tests).
+We do this, and along the way, refactor the tests to inject the test_client.
+
+We then add a `/examples` view, starting with a test of course.
+This uses an `examples.jinja2` template.
+We wire this up into the navbar and have the test ensure that it is there.
+
 
 - Get the "database"
 - Make /examples/index.html

@@ -4,13 +4,10 @@ from bs4 import BeautifulSoup
 from playwright.sync_api import Page
 from starlette.testclient import TestClient
 
-from psc.app import app
 
-
-def test_hello_world() -> None:
+def test_hello_world(test_client: TestClient) -> None:
     """Test the static HTML for Hello World."""
-    client = TestClient(app)
-    response = client.get("/examples/hello_world/index.html")
+    response = test_client.get("/examples/hello_world/index.html")
     assert response.status_code == 200
     soup = BeautifulSoup(response.text, "html5lib")
     title = soup.select_one("title")
