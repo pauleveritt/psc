@@ -2,7 +2,7 @@
 
 We use paths as the "id" values. More specifically, PurePath.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import PurePath
 from typing import cast
 
@@ -11,13 +11,12 @@ from bs4 import Tag
 
 from psc.app import HERE
 
-
 EXCLUSIONS = ("pyscript.css", "pyscript.js", "favicon.png")
 
 
 def tag_filter(
-    tag: Tag,
-    exclusions: tuple[str, ...] = EXCLUSIONS,
+        tag: Tag,
+        exclusions: tuple[str, ...] = EXCLUSIONS,
 ) -> bool:
     """Filter nodes from example that should not get included."""
     attr = "href" if tag.name == "link" else "src"
@@ -104,3 +103,22 @@ class Example(Resource):
 
         # Extra PyScript
         self.extra_pyscript = get_pyscript_nodes(soup)
+
+
+@dataclass
+class Resources:
+    examples: dict[PurePath, Example] = field(default_factory=dict)
+
+
+def get_resources() -> Resources:
+    """Factory to construct all the resources in the site."""
+    resources = Resources()
+
+    # Load the examples
+    examples_dir = HERE / "examples"
+    examples = [e for e in examples_dir.iterdir() if e.is_dir()]
+    for example in examples:
+        this_path = PurePath(example.name)
+        this_example = Example(path=this_path)
+        resources.examples[this_path] = this_example
+    return resources

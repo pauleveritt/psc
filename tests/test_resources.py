@@ -4,7 +4,7 @@ from pathlib import PurePath
 import pytest
 from bs4 import BeautifulSoup
 
-from psc.resources import Example
+from psc.resources import Example, get_resources
 from psc.resources import get_head_nodes
 from psc.resources import get_main_node
 from psc.resources import get_pyscript_nodes
@@ -97,3 +97,10 @@ def test_example() -> None:
     assert "<main>" in this_example.main
     assert "<py-config>" not in this_example.extra_pyscript
     assert "<py-script>" in this_example.extra_pyscript
+
+
+def test_get_resources() -> None:
+    """Ensure the dict-of-dicts is generated with PurePath keys."""
+    resources = get_resources()
+    hello_world_path = PurePath("hello_world")
+    assert resources.examples[hello_world_path].title == "Hello World"
