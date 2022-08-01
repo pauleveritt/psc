@@ -4,7 +4,9 @@ from pathlib import PurePath
 import pytest
 from bs4 import BeautifulSoup
 
+from psc.here import HERE
 from psc.resources import Example
+from psc.resources import get_description
 from psc.resources import get_head_nodes
 from psc.resources import get_main_node
 from psc.resources import get_pyscript_nodes
@@ -34,6 +36,20 @@ def test_tag_filter(head_soup: BeautifulSoup) -> None:
     assert not tag_filter(excluded_script, exclusions=("pyscript.js",))
     included_script = head_soup.select("script")[1]
     assert tag_filter(included_script, exclusions=("pyscript.js",))
+
+
+def test_description_not_present() -> None:
+    """No index.md file in the example folder."""
+    index_html_file = HERE / "examples/xx/index.html"
+    html = get_description(index_html_file)
+    assert html == ""
+
+
+def test_description() -> None:
+    """An index.md file is in the example folder."""
+    index_html_file = HERE / "examples/hello_world/index.html"
+    html = get_description(index_html_file)
+    assert html == "<p>This is the <em>hello world</em> example.</p>\n"
 
 
 def test_get_head_nodes(head_soup: BeautifulSoup) -> None:
@@ -96,6 +112,9 @@ def test_example() -> None:
     assert (
         this_example.subtitle
         == "The classic hello world, but in Python -- in a browser!"
+    )
+    assert (
+        this_example.description == "<p>This is the <em>hello world</em> example.</p>\n"
     )
     assert "hello_world.css" in this_example.extra_head
     assert "hello_world.js" in this_example.extra_head

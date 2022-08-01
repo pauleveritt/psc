@@ -4,11 +4,13 @@ We use paths as the "id" values. More specifically, PurePath.
 """
 from dataclasses import dataclass
 from dataclasses import field
+from pathlib import Path
 from pathlib import PurePath
 from typing import cast
 
 from bs4 import BeautifulSoup
 from bs4 import Tag
+from markdown_it import MarkdownIt
 
 from psc.here import HERE
 
@@ -30,6 +32,16 @@ def tag_filter(
         if attr_value.endswith(exclusion):
             return False
     return True
+
+
+def get_description(index_html_file: Path) -> str:
+    """Read an index.md if present and convert to HTML."""
+    md_file = index_html_file.parent / "index.md"
+    if not md_file.exists():
+        return ""
+    md_content = md_file.read_text()
+    md = MarkdownIt()
+    return str(md.render(md_content))
 
 
 def get_head_nodes(s: BeautifulSoup) -> str:
@@ -84,8 +96,9 @@ class Example(Resource):
     Meaning, HERE / "examples" / name / "index.html".
     """
 
-    subtitle: str = ""
+    description: str = ""
     extra_pyscript: str = ""
+    subtitle: str = ""
 
     def __post_init__(self) -> None:
         """Extract most of the data from the HTML file."""
@@ -100,9 +113,12 @@ class Example(Resource):
 
         # Subtitle
         subtitle_node = soup.select_one('meta[name="subtitle"]')
-        assert subtitle_node
+        assert subtitle_node  # noqa
         subtitle = cast(str, subtitle_node.get("content", ""))
         self.subtitle = subtitle
+
+        # Description
+        self.description = get_description(index_html_file)
 
         # Head
         self.extra_head = get_head_nodes(soup)

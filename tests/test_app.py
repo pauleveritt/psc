@@ -27,13 +27,21 @@ def test_examples_listing(get_soup: SoupGetter) -> None:
     assert examples_href
     examples_soup = get_soup(examples_href)
     assert examples_soup
+
+    # Example title
     examples_title = examples_soup.select_one("title")
     assert examples_title
     assert examples_title.text == "Examples | PyScript Collective"
 
+    # Example subtitle
     subtitle = examples_soup.select_one("p.subtitle")
     assert subtitle
     assert subtitle.text == "The classic hello world, but in Python -- in a browser!"
+
+    # Example description
+    description_em = examples_soup.select_one("div.content em")
+    assert description_em
+    assert description_em.text == "hello world"
 
     # Get the first example, follow the link, ensure it is Hello World
     first_example = examples_soup.select_one("p.title a")
