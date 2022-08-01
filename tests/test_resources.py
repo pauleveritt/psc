@@ -93,6 +93,10 @@ def test_example() -> None:
     """Construct an ``Example`` and ensure it has all the template bits."""
     this_example = Example(path=PurePath("hello_world"))
     assert this_example.title == "Hello World"
+    assert (
+        this_example.subtitle
+        == "The classic hello world, but in Python -- in a browser!"
+    )
     assert "hello_world.css" in this_example.extra_head
     assert "hello_world.js" in this_example.extra_head
     assert "<main>" in this_example.main
@@ -104,4 +108,9 @@ def test_get_resources() -> None:
     """Ensure the dict-of-dicts is generated with PurePath keys."""
     resources = get_resources()
     hello_world_path = PurePath("hello_world")
-    assert resources.examples[hello_world_path].title == "Hello World"
+    hello_world = resources.examples[hello_world_path]
+    assert hello_world.title == "Hello World"
+    assert (
+        hello_world.subtitle
+        == "The classic hello world, but in Python -- in a browser!"
+    )

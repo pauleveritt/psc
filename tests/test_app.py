@@ -8,6 +8,8 @@ def test_homepage(get_soup: SoupGetter) -> None:
     # response = test_client.get("/")
     # assert response.status_code == 200
     soup = get_soup("/")
+
+    # Title and main
     title = soup.select_one("title")
     assert title
     assert title.text == "Home Page | PyScript Collective"
@@ -28,6 +30,10 @@ def test_examples_listing(get_soup: SoupGetter) -> None:
     examples_title = examples_soup.select_one("title")
     assert examples_title
     assert examples_title.text == "Examples | PyScript Collective"
+
+    subtitle = examples_soup.select_one("p.subtitle")
+    assert subtitle
+    assert subtitle.text == "The classic hello world, but in Python -- in a browser!"
 
     # Get the first example, follow the link, ensure it is Hello World
     first_example = examples_soup.select_one("p.title a")

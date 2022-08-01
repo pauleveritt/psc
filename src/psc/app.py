@@ -65,6 +65,7 @@ async def example(request: Request) -> _TemplateResponse:
         "example.jinja2",
         dict(
             title=this_example.title,
+            subtitle=this_example.subtitle,
             extra_head=this_example.extra_head,
             main=this_example.main,
             extra_pyscript=this_example.extra_pyscript,

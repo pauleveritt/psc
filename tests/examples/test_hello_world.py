@@ -8,9 +8,17 @@ from psc.fixtures import SoupGetter
 def test_hello_world(get_soup: SoupGetter) -> None:
     """Test the static HTML for Hello World."""
     soup = get_soup("/examples/hello_world/index.html")
+
+    # Title and subtitle
     title = soup.select_one("title")
     assert title
     assert title.text == "Hello World | PyScript Collective"
+    subtitle = soup.select_one('meta[name="subtitle"]')
+    assert subtitle
+    assert (
+        subtitle.get("content")
+        == "The classic hello world, but in Python -- in a browser!"
+    )
 
     # See if extra_head got filled, then resolve those
     assert soup.find_all("link", href="hello_world.css")

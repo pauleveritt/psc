@@ -84,6 +84,7 @@ class Example(Resource):
     Meaning, HERE / "examples" / name / "index.html".
     """
 
+    subtitle: str = ""
     extra_pyscript: str = ""
 
     def __post_init__(self) -> None:
@@ -96,6 +97,12 @@ class Example(Resource):
         # Title
         title_node = soup.select_one("title")
         self.title = title_node.text if title_node else ""
+
+        # Subtitle
+        subtitle_node = soup.select_one('meta[name="subtitle"]')
+        assert subtitle_node
+        subtitle = cast(str, subtitle_node.get("content", ""))
+        self.subtitle = subtitle
 
         # Head
         self.extra_head = get_head_nodes(soup)
