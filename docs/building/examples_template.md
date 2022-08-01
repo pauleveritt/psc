@@ -34,7 +34,7 @@ Why are we doing that?
 
 The HTML for an example might appear in a bunch of places:
 
-1. *Standalone*. 
+1. *Standalone*.
 People want to cut-and-paste an example and run it from a `file:///` URL.
 The Contributor might want to start this way. It needs the PyScript JS/CSS and possibly a `<py-config>`.
 2. *Integrated Website*.
@@ -97,3 +97,14 @@ We'll write some tests:
 - Ensure only one `<py-config>` with a runtime pointed to our local Pyodide
 - The `<py-script>` is copied over, in the right spot
 - Some tracer `<h6>` that is *outside* of `<main>` is *not* copied over
+
+## QA
+
+`mypy` gave us some trouble at the end, because `beautifulsoup` has some unusual typing.
+We thus moved the `example` view's soup filtering into a standalone function which had a `cast`.
+
+## Future
+
+This is actually pretty neat.
+But the view is doing too much.
+Later, we'll introduce a "resource" concept, kind of like a model, and move the work there.

@@ -18,8 +18,8 @@ def test_hello_world() -> None:
     assert title.text == "Hello World | PyScript Collective"
 
     # See if extra_head got filled, then resolve those
-    assert soup.find_all('link', href="hello_world.css")
-    assert soup.find_all('script', src="hello_world.js")
+    assert soup.find_all("link", href="hello_world.css")
+    assert soup.find_all("script", src="hello_world.js")
 
     # Ensure the ``<main>`` got filled
     assert soup.select_one("main")
@@ -34,6 +34,7 @@ def test_hello_world() -> None:
 
     # The tracer <h6> is not present
     assert not soup.select("h6")
+
 
 @pytest.mark.full
 def test_hello_world_full(fake_page: Page) -> None:
