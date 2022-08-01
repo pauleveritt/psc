@@ -6,7 +6,7 @@ import pytest
 from playwright.sync_api import Page
 from playwright.sync_api import Route
 
-from psc.app import HERE
+from psc.here import HERE
 
 
 def route_handler(page: Page, route: Route) -> None:

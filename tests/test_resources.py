@@ -4,10 +4,11 @@ from pathlib import PurePath
 import pytest
 from bs4 import BeautifulSoup
 
-from psc.resources import Example, get_resources
+from psc.resources import Example
 from psc.resources import get_head_nodes
 from psc.resources import get_main_node
 from psc.resources import get_pyscript_nodes
+from psc.resources import get_resources
 from psc.resources import tag_filter
 
 

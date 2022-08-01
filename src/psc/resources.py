@@ -2,21 +2,23 @@
 
 We use paths as the "id" values. More specifically, PurePath.
 """
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from pathlib import PurePath
 from typing import cast
 
 from bs4 import BeautifulSoup
 from bs4 import Tag
 
-from psc.app import HERE
+from psc.here import HERE
+
 
 EXCLUSIONS = ("pyscript.css", "pyscript.js", "favicon.png")
 
 
 def tag_filter(
-        tag: Tag,
-        exclusions: tuple[str, ...] = EXCLUSIONS,
+    tag: Tag,
+    exclusions: tuple[str, ...] = EXCLUSIONS,
 ) -> bool:
     """Filter nodes from example that should not get included."""
     attr = "href" if tag.name == "link" else "src"
@@ -107,6 +109,8 @@ class Example(Resource):
 
 @dataclass
 class Resources:
+    """Container for all resources in site."""
+
     examples: dict[PurePath, Example] = field(default_factory=dict)
 
 
