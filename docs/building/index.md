@@ -23,5 +23,6 @@ cmd_runner
 playwright
 first_pyscript
 bulma
+examples_template
 build_step
 ```
