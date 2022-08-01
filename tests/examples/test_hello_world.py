@@ -1,5 +1,6 @@
 """Test the ``Hello World`` example."""
 import pytest
+from bs4 import BeautifulSoup
 from playwright.sync_api import Page
 from starlette.testclient import TestClient
 
@@ -11,8 +12,28 @@ def test_hello_world() -> None:
     client = TestClient(app)
     response = client.get("/examples/hello_world/index.html")
     assert response.status_code == 200
-    assert "<title>PyScript Hello World" in response.text
+    soup = BeautifulSoup(response.text, "html5lib")
+    title = soup.select_one("title")
+    assert title
+    assert title.text == "Hello World | PyScript Collective"
 
+    # See if extra_head got filled, then resolve those
+    assert soup.find_all('link', href="hello_world.css")
+    assert soup.find_all('script', src="hello_world.js")
+
+    # Ensure the ``<main>`` got filled
+    assert soup.select_one("main")
+
+    # Only one <py-config>, pointing to local runtime
+    py_configs = soup.select("py-config")
+    assert len(py_configs) == 1
+
+    # The <py-script> is present
+    py_scripts = soup.select("py-script")
+    assert len(py_scripts) == 1
+
+    # The tracer <h6> is not present
+    assert not soup.select("h6")
 
 @pytest.mark.full
 def test_hello_world_full(fake_page: Page) -> None:
