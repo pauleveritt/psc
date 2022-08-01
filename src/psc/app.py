@@ -2,6 +2,7 @@
 import contextlib
 from pathlib import PurePath
 from typing import AsyncContextManager
+from typing import Iterator
 
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -13,6 +14,7 @@ from starlette.templating import Jinja2Templates
 from starlette.templating import _TemplateResponse
 
 from psc.here import HERE
+from psc.resources import Example
 from psc.resources import Resources
 from psc.resources import get_resources
 
@@ -39,6 +41,20 @@ async def homepage(request: Request) -> _TemplateResponse:
     )
 
 
+async def examples(request: Request) -> _TemplateResponse:
+    """Handle the examples listing page."""
+    these_examples: Iterator[Example] = request.app.state.resources.examples.values()
+
+    return templates.TemplateResponse(
+        "examples.jinja2",
+        dict(
+            title="Examples",
+            examples=these_examples,
+            request=request,
+        ),
+    )
+
+
 async def example(request: Request) -> _TemplateResponse:
     """Handle an example page."""
     example_path = PurePath(request.path_params["example_name"])
@@ -60,7 +76,10 @@ async def example(request: Request) -> _TemplateResponse:
 routes = [
     Route("/", homepage),
     Route("/index.html", homepage),
+    Route("/examples/index.html", examples),
+    Route("/examples", examples),
     Route("/examples/{example_name}/index.html", example),
+    Route("/examples/{example_name}", example),
     Route("/favicon.png", favicon),
     Mount("/examples", StaticFiles(directory=HERE / "examples")),
     Mount("/static", StaticFiles(directory=HERE / "static")),

@@ -1,15 +1,13 @@
 """Test the ``Hello World`` example."""
 import pytest
-from bs4 import BeautifulSoup
 from playwright.sync_api import Page
-from starlette.testclient import TestClient
+
+from psc.fixtures import SoupGetter
 
 
-def test_hello_world(test_client: TestClient) -> None:
+def test_hello_world(get_soup: SoupGetter) -> None:
     """Test the static HTML for Hello World."""
-    response = test_client.get("/examples/hello_world/index.html")
-    assert response.status_code == 200
-    soup = BeautifulSoup(response.text, "html5lib")
+    soup = get_soup("/examples/hello_world/index.html")
     title = soup.select_one("title")
     assert title
     assert title.text == "Hello World | PyScript Collective"

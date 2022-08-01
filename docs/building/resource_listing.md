@@ -39,18 +39,30 @@ We'll use Starlette's "lifespan" support to:
 - Runs `get_resources` and...
 - Assigns to `app.state.resources`
 
-We'll then change the `examples` view to get the resource from `request.app.state.resources`.
+We'll then change the `example` view to get the resource from `request.app.state.resources`.
 
 When we do this, though, `TestClient` breaks.
 It doesn't ordinarily run the lifecycle methods.
 Instead, we need to use the [context manager](https://www.starlette.io/events/#running-event-handlers-in-tests).
 We do this, and along the way, refactor the tests to inject the test_client.
+In fact, we also make a `get_soup` fixture that further eases test writing.
 
 We then add a `/examples` view, starting with a test of course.
 This uses an `examples.jinja2` template.
-We wire this up into the navbar and have the test ensure that it is there.
+We wire this up into the navbar and have the test ensure that it is there via navbar.
 
+The listings use a [Bulma tile 3 column](https://bulma.io/documentation/layout/tiles/#3-columns) layout.
+Lots that can be done here.
 
-- Get the "database"
-- Make /examples/index.html
-- List them there
+## Cleanup
+
+- Arrange for `/example/hello_world` and `/example/hello_world/index.html` to both resolve
+- Fix the silly BeautifulSoup "allow str or List[str]" in upstream so tests don't have to cast all the time
+
+- Don't extract `<main>` itself from the example, as we want to control it in the layout...just the children
+- Make the home
+
+## Future
+
+- Have the rows in the tiles be yielded by a generator, allowing multi-column title
+- Include contributor information at bottom of each tile
