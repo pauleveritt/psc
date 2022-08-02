@@ -1,5 +1,15 @@
 {% extends "layout.jinja2" %}
 {% block main %}
+    <section class="hero is-small is-dark">
+        <div class="hero-body">
+            <p class="title">
+                PyScript Gallery
+            </p>
+            <p class="subtitle">
+                Curated examples, runnable from this website or locally installable.
+            </p>
+        </div>
+    </section>
     <main id="main_container" class="container">
         <div class="tile is-ancestor">
             {% for example in examples %}
