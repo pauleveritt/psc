@@ -128,6 +128,10 @@ def test_md_page() -> None:
     """Make an instance of a .md Page resource and test it."""
     this_page = Page(path=PurePath("about"))
     assert this_page.title == "About PyScript Collective"
+    assert (
+        this_page.subtitle
+        == "The mission, background, and moving parts about the Collective."
+    )
     assert "<em>is here</em>" in this_page.body
 
 
@@ -135,6 +139,7 @@ def test_html_page() -> None:
     """Make an instance of a .html Page resource and test it."""
     this_page = Page(path=PurePath("contributing"))
     assert this_page.title == "Contributing"
+    assert this_page.subtitle == "How to get involved in the PyCharm Collective."
     assert 'id="viewer"' in this_page.body
 
 

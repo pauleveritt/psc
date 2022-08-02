@@ -135,6 +135,7 @@ class Example(Resource):
 class Page(Resource):
     """A Markdown+frontmatter driven content page."""
 
+    subtitle: str = ""
     body: str = ""
 
     def __post_init__(self) -> None:
@@ -145,6 +146,7 @@ class Page(Resource):
         if md_file.exists():
             md_fm = frontmatter.load(md_file)
             self.title = md_fm["title"]
+            self.subtitle = md_fm["subtitle"]
             md = MarkdownIt()
             self.body = str(md.render(md_fm.content))
         elif html_file.exists():
@@ -152,6 +154,11 @@ class Page(Resource):
             title_node = soup.find("title")
             if title_node:
                 self.title = title_node.text
+            subtitle_node = soup.select_one('meta[name="subtitle"]')
+            if subtitle_node:
+                assert subtitle_node  # noqa
+                subtitle = cast(str, subtitle_node.get("content", ""))
+                self.subtitle = subtitle
             body_node = soup.find("body")
             if body_node and isinstance(body_node, Tag):
                 self.body = body_node.prettify()

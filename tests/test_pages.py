@@ -12,10 +12,16 @@ def test_about_page(get_soup: SoupGetter) -> None:
     about_soup = get_soup(about_href)
     assert about_soup
 
-    # Page title
+    # Page title/subtitle
     page_title = about_soup.select_one("title")
     assert page_title
     assert page_title.text == "About PyScript Collective | PyScript Collective"
+    subtitle = about_soup.select_one(".subtitle")
+    assert subtitle
+    assert (
+        subtitle.text
+        == "The mission, background, and moving parts about the Collective."
+    )
 
     # Page body
     em = about_soup.select_one("main em")
