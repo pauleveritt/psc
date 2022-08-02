@@ -7,20 +7,20 @@ The PyScript Collective is: software and people, from and for the PyScript Commu
 
 # Helping Learners and Contributors
 
-We want PyScript to be a great onboarding vehicle for Python, data science, and web coding. 
-Fortunately a lot of folks want to help too! 
+We want PyScript to be a great onboarding vehicle for Python, data science, and web coding.
+Fortunately a lot of folks want to help too!
 The Collective is a community project to organize everything about PyScript (and related projects like Pyodide) into useful collections.
 
 Things we work on:
 
 ## The `awesome-pyscript` Page
 
-Awesome PyScript is an organized, curated, and updated collection of every…damn…thing. 
-If you have an example, put it up somewhere and let us know. 
-We’ll list it (terms and conditions apply.) 
+Awesome PyScript is an organized, curated, and updated collection of every…damn…thing.
+If you have an example, put it up somewhere and let us know.
+We’ll list it (terms and conditions apply.)
 Same for an article, a video, a conference talk, whatever.
 
-We’ll list it, but we won’t stand behind it. We’ll remove it if we’re told it’s no longer good, but that’s it. 
+We’ll list it, but we won’t stand behind it. We’ll remove it if we’re told it’s no longer good, but that’s it.
 Not much of a “stamp of approval."
 
 If you’re looking for a collection of quality, working, maintained stuff, then that would be…
@@ -38,14 +38,14 @@ The Collective has a larger purpose: education.
 
 ## Contributors and Collaborators
 
-The Collective is a shared-responsibility repo of resources, such as examples. 
-As such, it is *also* a group of maintainers who help stuff come in, help clean it up, help teach people, then stand behind what goes in. 
-We’ll fix bugs, refactor examples if PyScript changes, answer tickets, etc. 
+The Collective is a shared-responsibility repo of resources, such as examples.
+As such, it is *also* a group of maintainers who help stuff come in, help clean it up, help teach people, then stand behind what goes in.
+We’ll fix bugs, refactor examples if PyScript changes, answer tickets, etc.
 
-Even better, we help contributors *join* the Collective and become collaborators. 
+Even better, we help contributors *join* the Collective and become collaborators.
 And those new contributors can then help the next person.
-We want the Collective to become a joyful place where people are **valued and valuable**. 
-Where new coders become the next generation of stars. 
+We want the Collective to become a joyful place where people are **valued and valuable**.
+Where new coders become the next generation of stars.
 Hell, we want people to list it on their resume, where the Collective helps them land a job.
 
 As such, the Collective has a higher bar. It isn’t fair to the maintainers for new contributors to do a “dump and run.” We’ll require: tests, docstrings, and perhaps some code quality tools (flake8, black.) Why? To make it easy to maintain, but also to be shining code examples for learners.
@@ -58,13 +58,13 @@ Stuff in the “incubator” might not be listed publicly. Such as...
 
 ## Will This Work?
 
-It’s kind of ambitious, in a social way. 
-Will we get contributors? 
-Maintainers? 
-Will people want to join? 
+It’s kind of ambitious, in a social way.
+Will we get contributors?
+Maintainers?
+Will people want to join?
 
-We think so. 
-Rather, we very-much hope so. 
+We think so.
+Rather, we very-much hope so.
 We’d like PyScript to be a vehicle for crazy-cool innovation, growth, and togetherness, similar to how data science impacted Python.
 
 ## Kinda Vague, What Specifically?

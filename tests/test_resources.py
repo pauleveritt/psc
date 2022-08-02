@@ -127,12 +127,12 @@ def test_example() -> None:
 def test_md_page() -> None:
     """Make an instance of a .md Page resource and test it."""
     this_page = Page(path=PurePath("about"))
-    assert this_page.title == "About PyScript Collective"
+    assert this_page.title == "About the PyScript Collective"
     assert (
         this_page.subtitle
         == "The mission, background, and moving parts about the Collective."
     )
-    assert "<em>is here</em>" in this_page.body
+    assert "<h1>Helping" in this_page.body
 
 
 def test_html_page() -> None:
@@ -159,5 +159,5 @@ def test_get_resources() -> None:
     # Page
     about_path = PurePath("about")
     about = resources.pages[about_path]
-    assert about.title == "About PyScript Collective"
-    assert "<em>is here</em>" in about.body
+    assert about.title == "About the PyScript Collective"
+    assert "<h1>Helping" in about.body

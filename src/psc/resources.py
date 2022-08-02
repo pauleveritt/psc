@@ -162,7 +162,7 @@ class Page(Resource):
             body_node = soup.find("body")
             if body_node and isinstance(body_node, Tag):
                 self.body = body_node.prettify()
-        else:
+        else:  # pragma: no cover
             raise ValueError(f"No page at {self.path}")
 
 

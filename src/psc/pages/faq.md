@@ -34,6 +34,9 @@ Consuming the Gallery and contributing should be more joyful.
 Also, we want a stable checkpoint in time.
 The examples will work against a known set of stuff, because we'll bundle that set of stuff.
 
+If you're interested in such stuff, take a look at the docs for the prototype repo.
+In there is a step-by-step diary of the journey taken for all of these decisions.
+
 ### What's up with testing?
 
 Well, glad you asked!

@@ -15,7 +15,7 @@ def test_about_page(get_soup: SoupGetter) -> None:
     # Page title/subtitle
     page_title = about_soup.select_one("title")
     assert page_title
-    assert page_title.text == "About PyScript Collective | PyScript Collective"
+    assert page_title.text == "About the PyScript Collective | PyScript Collective"
     subtitle = about_soup.select_one(".subtitle")
     assert subtitle
     assert (
@@ -26,4 +26,4 @@ def test_about_page(get_soup: SoupGetter) -> None:
     # Page body
     em = about_soup.select_one("main em")
     assert em
-    assert em.text == "is here"
+    assert em.text == "share"
