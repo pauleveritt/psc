@@ -13,8 +13,8 @@ def test_homepage(get_soup: SoupGetter) -> None:
     title = soup.select_one("title")
     assert title
     assert title.text == "Home Page | PyScript Collective"
-    main = soup.select_one("main")
-    assert main
+    section = soup.select_one("section")
+    assert section
 
 
 def test_examples_listing(get_soup: SoupGetter) -> None:
