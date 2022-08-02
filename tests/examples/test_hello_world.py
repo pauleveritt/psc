@@ -1,21 +1,24 @@
 """Test the ``Hello World`` example."""
 import pytest
-from bs4 import BeautifulSoup
 from playwright.sync_api import Page
-from starlette.testclient import TestClient
 
-from psc.app import app
+from psc.fixtures import SoupGetter
 
 
-def test_hello_world() -> None:
+def test_hello_world(get_soup: SoupGetter) -> None:
     """Test the static HTML for Hello World."""
-    client = TestClient(app)
-    response = client.get("/examples/hello_world/index.html")
-    assert response.status_code == 200
-    soup = BeautifulSoup(response.text, "html5lib")
+    soup = get_soup("/examples/hello_world/index.html")
+
+    # Title and subtitle
     title = soup.select_one("title")
     assert title
     assert title.text == "Hello World | PyScript Collective"
+    subtitle = soup.select_one('meta[name="subtitle"]')
+    assert subtitle
+    assert (
+        subtitle.get("content")
+        == "The classic hello world, but in Python -- in a browser!"
+    )
 
     # See if extra_head got filled, then resolve those
     assert soup.find_all("link", href="hello_world.css")

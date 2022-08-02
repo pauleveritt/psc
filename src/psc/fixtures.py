@@ -1,12 +1,20 @@
 """pytest fixtures to make testing easier."""
 from mimetypes import guess_type
+from typing import Callable
+from typing import Generator
 from urllib.parse import urlparse
 
 import pytest
+from bs4 import BeautifulSoup
 from playwright.sync_api import Page
 from playwright.sync_api import Route
+from starlette.testclient import TestClient
 
-from psc.app import HERE
+from psc import app
+from psc.here import HERE
+
+
+SoupGetter = Callable[[str | list[str]], BeautifulSoup]
 
 
 def route_handler(page: Page, route: Route) -> None:
@@ -34,7 +42,7 @@ def route_handler(page: Page, route: Route) -> None:
 
     if mime_type:
         route.fulfill(body=body, headers={"Content-Type": mime_type})
-    else:
+    else:  # pragma: no cover
         route.fulfill(body=body)
 
 
@@ -50,3 +58,26 @@ def fake_page(page: Page) -> Page:  # pragma: no cover
     # fake server and run through the interceptor instead.
     page.route("**", _route_handler)
     return page
+
+
+@pytest.fixture
+def test_client() -> Generator[TestClient, None, None]:
+    """Return the app in a context manager to allow lifecycle to run."""
+    with TestClient(app) as client:
+        yield client
+
+
+@pytest.fixture
+def get_soup(test_client: TestClient) -> SoupGetter:
+    """Return a callable which uses TestClient and returns soup."""
+
+    def _get_soup(url: str | list[str]) -> BeautifulSoup:
+        # BeautifulSoup is silly about allowing list of values, which
+        # makes mypy mad. Let's fix so downstream doesn't need to cast all the time.
+        if isinstance(url, list):  # pragma: no cover
+            raise ValueError("Do not allow a list.")
+        response = test_client.get(url)
+        assert response.status_code == 200  # noqa
+        return BeautifulSoup(response.text, "html5lib")
+
+    return _get_soup
