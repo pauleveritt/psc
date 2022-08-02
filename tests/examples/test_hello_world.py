@@ -7,7 +7,7 @@ from psc.fixtures import SoupGetter
 
 def test_hello_world(get_soup: SoupGetter) -> None:
     """Test the static HTML for Hello World."""
-    soup = get_soup("/examples/hello_world/index.html")
+    soup = get_soup("/gallery/hello_world/index.html")
 
     # Title and subtitle
     title = soup.select_one("title")

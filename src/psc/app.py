@@ -1,4 +1,4 @@
-"""Provide a web server to browse the examples."""
+"""Provide a web server to browse the gallery."""
 import contextlib
 from pathlib import PurePath
 from typing import AsyncContextManager
@@ -40,14 +40,14 @@ async def homepage(request: Request) -> _TemplateResponse:
     )
 
 
-async def examples(request: Request) -> _TemplateResponse:
-    """Handle the examples listing page."""
+async def gallery(request: Request) -> _TemplateResponse:
+    """Handle the gallery listing page."""
     these_examples: Iterator[Example] = request.app.state.resources.examples.values()
 
     return templates.TemplateResponse(
-        "examples.jinja2",
+        "gallery.jinja2",
         dict(
-            title="Examples",
+            title="Gallery",
             examples=these_examples,
             request=request,
         ),
@@ -92,13 +92,13 @@ async def content_page(request: Request) -> _TemplateResponse:
 routes = [
     Route("/", homepage),
     Route("/index.html", homepage),
-    Route("/examples/index.html", examples),
-    Route("/examples", examples),
-    Route("/examples/{example_name}/index.html", example),
-    Route("/examples/{example_name}", example),
+    Route("/gallery/index.html", gallery),
+    Route("/gallery", gallery),
+    Route("/gallery/{example_name}/index.html", example),
+    Route("/gallery/{example_name}", example),
     Route("/pages/{page_name}", content_page),
     Route("/favicon.png", favicon),
-    Mount("/examples", StaticFiles(directory=HERE / "examples")),
+    Mount("/gallery", StaticFiles(directory=HERE / "examples")),
     Mount("/static", StaticFiles(directory=HERE / "static")),
 ]
 

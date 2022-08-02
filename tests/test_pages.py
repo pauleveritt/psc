@@ -5,7 +5,7 @@ from psc.fixtures import SoupGetter
 def test_about_page(get_soup: SoupGetter) -> None:
     """Use the navbar to get the link to the about page."""
     index_soup = get_soup("/")
-    about_link = index_soup.select_one("#about")
+    about_link = index_soup.select_one("#navbarAbout")
     assert about_link
     about_href = about_link.get("href")
     assert about_href
