@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 from psc.here import HERE
 from psc.resources import Example
+from psc.resources import Page
 from psc.resources import get_description
 from psc.resources import get_head_nodes
 from psc.resources import get_main_node_content
@@ -47,7 +48,7 @@ def test_description_not_present() -> None:
 
 def test_description() -> None:
     """An index.md file is in the example folder."""
-    index_html_file = HERE / "examples/hello_world/index.html"
+    index_html_file = HERE / "gallery/examples/hello_world/index.html"
     html = get_description(index_html_file)
     assert html == "<p>This is the <em>hello world</em> example.</p>\n"
 
@@ -123,9 +124,30 @@ def test_example() -> None:
     assert "<py-script>" in this_example.extra_pyscript
 
 
+def test_md_page() -> None:
+    """Make an instance of a .md Page resource and test it."""
+    this_page = Page(path=PurePath("about"))
+    assert this_page.title == "About the PyScript Collective"
+    assert (
+        this_page.subtitle
+        == "The mission, background, and moving parts about the Collective."
+    )
+    assert "<h1>Helping" in this_page.body
+
+
+def test_html_page() -> None:
+    """Make an instance of a .html Page resource and test it."""
+    this_page = Page(path=PurePath("contributing"))
+    assert this_page.title == "Contributing"
+    assert this_page.subtitle == "How to get involved in the PyCharm Collective."
+    assert 'id="viewer"' in this_page.body
+
+
 def test_get_resources() -> None:
     """Ensure the dict-of-dicts is generated with PurePath keys."""
     resources = get_resources()
+
+    # Example
     hello_world_path = PurePath("hello_world")
     hello_world = resources.examples[hello_world_path]
     assert hello_world.title == "Hello World"
@@ -133,3 +155,9 @@ def test_get_resources() -> None:
         hello_world.subtitle
         == "The classic hello world, but in Python -- in a browser!"
     )
+
+    # Page
+    about_path = PurePath("about")
+    about = resources.pages[about_path]
+    assert about.title == "About the PyScript Collective"
+    assert "<h1>Helping" in about.body

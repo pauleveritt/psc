@@ -22,6 +22,7 @@ nox = "^2022.1.7"
 typer = { extras = ["all"], version = "^0.6.1" }
 starlette = "^0.20.4"
 uvicorn = "^0.18.2"
+python-frontmatter = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 Pygments = ">=2.10.0"
@@ -69,7 +70,7 @@ source = ["psc"]
 
 [tool.coverage.report]
 show_missing = true
-fail_under = 100
+fail_under = 95
 
 [tool.isort]
 profile = "black"
@@ -90,7 +91,8 @@ no_implicit_optional = true
 [[tool.mypy.overrides]]
 module = [
     'uvicorn',
-    'jinja2'
+    'jinja2',
+    'frontmatter'
 ]
 ignore_missing_imports = true
 

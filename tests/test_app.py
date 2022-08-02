@@ -13,15 +13,15 @@ def test_homepage(get_soup: SoupGetter) -> None:
     title = soup.select_one("title")
     assert title
     assert title.text == "Home Page | PyScript Collective"
-    main = soup.select_one("main")
-    assert main
+    section = soup.select_one("section")
+    assert section
 
 
 def test_examples_listing(get_soup: SoupGetter) -> None:
     """Ensure the route lists the examples."""
     # First get the URL from the navbar.
     index_soup = get_soup("/")
-    nav_examples = index_soup.select_one("#navbarExamples")
+    nav_examples = index_soup.select_one("#navbarGallery")
     assert nav_examples
     examples_href = nav_examples.get("href")
     assert examples_href
@@ -31,12 +31,12 @@ def test_examples_listing(get_soup: SoupGetter) -> None:
     # Example title
     examples_title = examples_soup.select_one("title")
     assert examples_title
-    assert examples_title.text == "Examples | PyScript Collective"
+    assert examples_title.text == "Gallery | PyScript Collective"
 
     # Example subtitle
     subtitle = examples_soup.select_one("p.subtitle")
     assert subtitle
-    assert subtitle.text == "The classic hello world, but in Python -- in a browser!"
+    assert "Curated" in subtitle.text
 
     # Example description
     description_em = examples_soup.select_one("div.content em")
@@ -47,7 +47,7 @@ def test_examples_listing(get_soup: SoupGetter) -> None:
     first_example = examples_soup.select_one("p.title a")
     assert first_example
     first_href = first_example.get("href")
-    assert first_href == "/examples/hello_world"
+    assert first_href == "/gallery/examples/hello_world"
     hello_soup = get_soup(first_href)
     assert hello_soup
     title = hello_soup.select_one("title")

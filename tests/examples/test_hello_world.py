@@ -7,7 +7,7 @@ from psc.fixtures import SoupGetter
 
 def test_hello_world(get_soup: SoupGetter) -> None:
     """Test the static HTML for Hello World."""
-    soup = get_soup("/examples/hello_world/index.html")
+    soup = get_soup("/gallery/examples/hello_world/index.html")
 
     # Title and subtitle
     title = soup.select_one("title")
@@ -42,11 +42,10 @@ def test_hello_world(get_soup: SoupGetter) -> None:
 @pytest.mark.full
 def test_hello_world_full(fake_page: Page) -> None:
     """Use Playwright to do a test on Hello World."""
-    # url = "http://127.0.0.1:3000/examples/hello_world/index.html"
-    url = "http://fake/examples/hello_world/index.html"
+    url = "http://fake/gallery/examples/hello_world/index.html"
     fake_page.goto(url)
-    element = fake_page.wait_for_selector("text=...world")
     # Turn this on when using `PWDEBUG=1` to run "head-ful"
-    # fake_page.pause()
+    fake_page.pause()
+    element = fake_page.wait_for_selector("text=...world")
     if element:
         assert element.text_content() == "...world"

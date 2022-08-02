@@ -1,4 +1,4 @@
-"""Provide a web server to browse the examples."""
+"""Provide a web server to browse the gallery."""
 import contextlib
 from pathlib import PurePath
 from typing import AsyncContextManager
@@ -32,7 +32,7 @@ async def homepage(request: Request) -> _TemplateResponse:
     index_file = HERE / "index.html"
 
     return templates.TemplateResponse(
-        "page.jinja2",
+        "homepage.jinja2",
         dict(
             title="Home Page",
             main=index_file.read_text(),
@@ -41,14 +41,14 @@ async def homepage(request: Request) -> _TemplateResponse:
     )
 
 
-async def examples(request: Request) -> _TemplateResponse:
-    """Handle the examples listing page."""
+async def gallery(request: Request) -> _TemplateResponse:
+    """Handle the gallery listing page."""
     these_examples: Iterator[Example] = request.app.state.resources.examples.values()
 
     return templates.TemplateResponse(
-        "examples.jinja2",
+        "gallery.jinja2",
         dict(
-            title="Examples",
+            title="Gallery",
             examples=these_examples,
             request=request,
         ),
@@ -74,15 +74,33 @@ async def example(request: Request) -> _TemplateResponse:
     )
 
 
+async def content_page(request: Request) -> _TemplateResponse:
+    """Handle a content page."""
+    page_path = PurePath(request.path_params["page_name"])
+    resources: Resources = request.app.state.resources
+    this_page = resources.pages[page_path]
+
+    return templates.TemplateResponse(
+        "page.jinja2",
+        dict(
+            title=this_page.title,
+            subtitle=this_page.subtitle,
+            main=this_page.body,
+            request=request,
+        ),
+    )
+
+
 routes = [
     Route("/", homepage),
     Route("/index.html", homepage),
-    Route("/examples/index.html", examples),
-    Route("/examples", examples),
-    Route("/examples/{example_name}/index.html", example),
-    Route("/examples/{example_name}", example),
+    Route("/gallery/index.html", gallery),
+    Route("/gallery", gallery),
+    Route("/gallery/examples/{example_name}/index.html", example),
+    Route("/gallery/examples/{example_name}", example),
+    Route("/pages/{page_name}", content_page),
     Route("/favicon.png", favicon),
-    Mount("/examples", StaticFiles(directory=HERE / "examples")),
+    Mount("/gallery", StaticFiles(directory=HERE / "gallery")),
     Mount("/static", StaticFiles(directory=HERE / "static")),
 ]
 

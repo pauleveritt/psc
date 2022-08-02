@@ -8,6 +8,7 @@ from pathlib import Path
 from pathlib import PurePath
 from typing import cast
 
+import frontmatter
 from bs4 import BeautifulSoup
 from bs4 import Tag
 from markdown_it import MarkdownIt
@@ -102,7 +103,7 @@ class Example(Resource):
 
     def __post_init__(self) -> None:
         """Extract most of the data from the HTML file."""
-        index_html_file = HERE / "examples" / self.path / "index.html"
+        index_html_file = HERE / "gallery/examples" / self.path / "index.html"
         if not index_html_file.exists():
             raise ValueError(f"No example at {self.path}")
         soup = BeautifulSoup(index_html_file.read_text(), "html5lib")
@@ -131,10 +132,46 @@ class Example(Resource):
 
 
 @dataclass
+class Page(Resource):
+    """A Markdown+frontmatter driven content page."""
+
+    subtitle: str = ""
+    body: str = ""
+
+    def __post_init__(self) -> None:
+        """Extract content from either Markdown or HTML file."""
+        md_file = HERE / "pages" / f"{self.path}.md"
+        html_file = HERE / "pages" / f"{self.path}.html"
+
+        if md_file.exists():
+            md_fm = frontmatter.load(md_file)
+            self.title = md_fm["title"]
+            self.subtitle = md_fm["subtitle"]
+            md = MarkdownIt()
+            self.body = str(md.render(md_fm.content))
+        elif html_file.exists():
+            soup = BeautifulSoup(html_file.read_text(), "html5lib")
+            title_node = soup.find("title")
+            if title_node:
+                self.title = title_node.text
+            subtitle_node = soup.select_one('meta[name="subtitle"]')
+            if subtitle_node:
+                assert subtitle_node  # noqa
+                subtitle = cast(str, subtitle_node.get("content", ""))
+                self.subtitle = subtitle
+            body_node = soup.find("body")
+            if body_node and isinstance(body_node, Tag):
+                self.body = body_node.prettify()
+        else:  # pragma: no cover
+            raise ValueError(f"No page at {self.path}")
+
+
+@dataclass
 class Resources:
     """Container for all resources in site."""
 
     examples: dict[PurePath, Example] = field(default_factory=dict)
+    pages: dict[PurePath, Page] = field(default_factory=dict)
 
 
 def get_resources() -> Resources:
@@ -142,10 +179,19 @@ def get_resources() -> Resources:
     resources = Resources()
 
     # Load the examples
-    examples_dir = HERE / "examples"
+    examples_dir = HERE / "gallery/examples"
     examples = [e for e in examples_dir.iterdir() if e.is_dir()]
     for example in examples:
         this_path = PurePath(example.name)
         this_example = Example(path=this_path)
         resources.examples[this_path] = this_example
+
+    # Load the Pages
+    pages_dir = HERE / "pages"
+    pages = [e for e in pages_dir.iterdir()]
+    for page in pages:
+        this_path = PurePath(page.stem)
+        this_page = Page(path=this_path)
+        resources.pages[this_path] = this_page
+
     return resources
