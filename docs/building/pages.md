@@ -14,6 +14,8 @@ Add a "Page" resource, with Markdown+frontmatter-driven content under `/pages`.
 
 ## Navbar
 
+- Wire `About` into the navbar
+
 ## Home Page
 
 - Better formatting

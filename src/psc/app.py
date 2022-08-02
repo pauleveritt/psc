@@ -18,7 +18,6 @@ from psc.resources import Example
 from psc.resources import Resources
 from psc.resources import get_resources
 
-
 templates = Jinja2Templates(directory=HERE / "templates")
 
 
@@ -32,7 +31,7 @@ async def homepage(request: Request) -> _TemplateResponse:
     index_file = HERE / "index.html"
 
     return templates.TemplateResponse(
-        "page.jinja2",
+        "homepage.jinja2",
         dict(
             title="Home Page",
             main=index_file.read_text(),
@@ -74,6 +73,22 @@ async def example(request: Request) -> _TemplateResponse:
     )
 
 
+async def content_page(request: Request) -> _TemplateResponse:
+    """Handle a content page."""
+    page_path = PurePath(request.path_params["page_name"])
+    resources: Resources = request.app.state.resources
+    this_page = resources.pages[page_path]
+
+    return templates.TemplateResponse(
+        "page.jinja2",
+        dict(
+            title=this_page.title,
+            main=this_page.body,
+            request=request,
+        ),
+    )
+
+
 routes = [
     Route("/", homepage),
     Route("/index.html", homepage),
@@ -81,6 +96,7 @@ routes = [
     Route("/examples", examples),
     Route("/examples/{example_name}/index.html", example),
     Route("/examples/{example_name}", example),
+    Route("/pages/{page_name}", content_page),
     Route("/favicon.png", favicon),
     Mount("/examples", StaticFiles(directory=HERE / "examples")),
     Mount("/static", StaticFiles(directory=HERE / "static")),
