@@ -95,11 +95,11 @@ routes = [
     Route("/index.html", homepage),
     Route("/gallery/index.html", gallery),
     Route("/gallery", gallery),
-    Route("/gallery/{example_name}/index.html", example),
-    Route("/gallery/{example_name}", example),
+    Route("/gallery/examples/{example_name}/index.html", example),
+    Route("/gallery/examples/{example_name}", example),
     Route("/pages/{page_name}", content_page),
     Route("/favicon.png", favicon),
-    Mount("/gallery", StaticFiles(directory=HERE / "examples")),
+    Mount("/gallery", StaticFiles(directory=HERE / "gallery")),
     Mount("/static", StaticFiles(directory=HERE / "static")),
 ]
 

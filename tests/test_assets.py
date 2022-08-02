@@ -17,7 +17,7 @@ def test_favicon(get_soup: SoupGetter, test_client: TestClient) -> None:
 
 def test_screenshot(test_client: TestClient) -> None:
     """Examples have screenshots which need a special route."""
-    response = test_client.get("/gallery/hello_world/screenshot.png")
+    response = test_client.get("/gallery/examples/hello_world/screenshot.png")
     assert response.status_code == 200
     assert response.headers["Content-Type"] == "image/png"
 

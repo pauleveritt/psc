@@ -36,7 +36,7 @@ def test_examples_listing(get_soup: SoupGetter) -> None:
     # Example subtitle
     subtitle = examples_soup.select_one("p.subtitle")
     assert subtitle
-    assert subtitle.text == "The classic hello world, but in Python -- in a browser!"
+    assert "Curated" in subtitle.text
 
     # Example description
     description_em = examples_soup.select_one("div.content em")
@@ -47,7 +47,7 @@ def test_examples_listing(get_soup: SoupGetter) -> None:
     first_example = examples_soup.select_one("p.title a")
     assert first_example
     first_href = first_example.get("href")
-    assert first_href == "/gallery/hello_world"
+    assert first_href == "/gallery/examples/hello_world"
     hello_soup = get_soup(first_href)
     assert hello_soup
     title = hello_soup.select_one("title")
