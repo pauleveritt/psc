@@ -137,14 +137,25 @@ class Page(Resource):
     body: str = ""
 
     def __post_init__(self):
-        """Extract content from Markdown file."""
+        """Extract content from either Markdown or HTML file."""
         md_file = HERE / "pages" / f"{self.path}.md"
-        if not md_file.exists():
+        html_file = HERE / "pages" / f"{self.path}.html"
+
+        if md_file.exists():
+            md_fm = frontmatter.load(md_file)
+            self.title = md_fm["title"]
+            md = MarkdownIt()
+            self.body = str(md.render(md_fm.content))
+        elif html_file.exists():
+            soup = BeautifulSoup(html_file.read_text(), "html5lib")
+            title_node = soup.find("title")
+            if title_node:
+                self.title = title_node.text
+            body_node = soup.find("body")
+            if body_node:
+                self.body = body_node.prettify()
+        else:
             raise ValueError(f"No page at {self.path}")
-        md_fm = frontmatter.load(md_file)
-        self.title = md_fm["title"]
-        md = MarkdownIt()
-        self.body = str(md.render(md_fm.content))
 
 
 @dataclass

@@ -124,11 +124,18 @@ def test_example() -> None:
     assert "<py-script>" in this_example.extra_pyscript
 
 
-def test_page() -> None:
-    """Make an instance of a Page resource and test it."""
+def test_md_page() -> None:
+    """Make an instance of a .md Page resource and test it."""
     this_page = Page(path=PurePath("about"))
     assert this_page.title == "About PyScript Collective"
     assert "<em>is here</em>" in this_page.body
+
+
+def test_html_page() -> None:
+    """Make an instance of a .html Page resource and test it."""
+    this_page = Page(path=PurePath("contributing"))
+    assert this_page.title == "Contributing"
+    assert 'id="viewer"' in this_page.body
 
 
 def test_get_resources() -> None:
