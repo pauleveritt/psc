@@ -6,7 +6,7 @@ Add a "Page" resource, with Markdown+frontmatter-driven content under `/pages`.
 
 ## Pages In `/pages`
 
-- All pages will be Markdown-driven, e.g. `src/psc/pages/about.md` and `/pages/about.html` 
+- All pages will be Markdown-driven, e.g. `src/psc/pages/about.md` and `/pages/about.html`
 - Install `python-frontmatter` as regular dependency
 - Write tests for a new `Page` resource type and views
 - Implement them

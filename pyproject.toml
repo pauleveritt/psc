@@ -91,7 +91,8 @@ no_implicit_optional = true
 [[tool.mypy.overrides]]
 module = [
     'uvicorn',
-    'jinja2'
+    'jinja2',
+    'frontmatter'
 ]
 ignore_missing_imports = true
 

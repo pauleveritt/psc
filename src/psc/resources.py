@@ -15,6 +15,7 @@ from markdown_it import MarkdownIt
 
 from psc.here import HERE
 
+
 EXCLUSIONS = ("pyscript.css", "pyscript.js", "favicon.png")
 
 
@@ -136,7 +137,7 @@ class Page(Resource):
 
     body: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Extract content from either Markdown or HTML file."""
         md_file = HERE / "pages" / f"{self.path}.md"
         html_file = HERE / "pages" / f"{self.path}.html"
@@ -152,7 +153,7 @@ class Page(Resource):
             if title_node:
                 self.title = title_node.text
             body_node = soup.find("body")
-            if body_node:
+            if body_node and isinstance(body_node, Tag):
                 self.body = body_node.prettify()
         else:
             raise ValueError(f"No page at {self.path}")
